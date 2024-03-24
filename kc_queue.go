@@ -17,11 +17,11 @@ type Queue[T any] struct {
 
 func New[T any]() *Queue[T] {
     result := &Queue[T]{}
-    result.Create()
+    result.create()
     return result
 }
 
-func (q* Queue[T]) Create() *Queue[T] {
+func (q* Queue[T]) create() *Queue[T] {
     initalSize := 1
     q.nodes = make([]T, initalSize)
     q.head = 0

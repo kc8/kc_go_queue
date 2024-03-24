@@ -17,11 +17,11 @@ func TestNewAndEnqueue(t *testing.T) {
     var q *Queue[int] = New[int]()
     q.Enqueue(1000)
     if q.IsEmpty() == true {
-        t.Errorf("Queue should have at least one elemenet, got isEmpty == true")
+        t.Errorf("Queue should have at least one element , got isEmpty == true")
     }
 
     if q.IsEmpty() == true {
-        t.Errorf("Queue should have at least one elemenet, got isEmpty == true")
+        t.Errorf("Queue should have at least one element, got isEmpty == true")
     }
 }
 
