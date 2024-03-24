@@ -5,21 +5,28 @@ import (
 )
 
 func TestEmptyQueueShouldNotFail(t *testing.T) {
-    var q *Queue = New()
+    var q *Queue[int]= New[int]()
 
     nothing := q.Deque();
-    if (nothing != nil) {
+    if (nothing != 0) {
         t.Errorf("Failed with none nil value\n")
     }
 }
 
 func TestNewAndEnqueue(t *testing.T) {
-    var q *Queue = New()
+    var q *Queue[int] = New[int]()
     q.Enqueue(1000)
+    if q.IsEmpty() == true {
+        t.Errorf("Queue should have at least one elemenet, got isEmpty == true")
+    }
+
+    if q.IsEmpty() == true {
+        t.Errorf("Queue should have at least one elemenet, got isEmpty == true")
+    }
 }
 
 func TestQueueEmpties(t *testing.T) {
-    var q *Queue = New()
+    var q *Queue[int] = New[int]()
     q.Enqueue(0)
     q.Enqueue(1)
     q.Enqueue(2)
@@ -32,20 +39,13 @@ func TestQueueEmpties(t *testing.T) {
     q.Deque()
 
     nothing := q.Deque()
-    if (nothing != nil) {
+    if (nothing != 0) {
         t.Errorf("q.Deque got value with none nil value %v\n", nothing)
     }
 }
 
-func Fail(t *testing.T) { 
-    truee := false
-    if (truee != true) {
-        t.Errorf("FAAIL:")
-    }
-}
-
 func TestQueueAddRemove(t *testing.T) {
-    var q *Queue = New()
+    var q *Queue[int] = New[int]()
     q.Enqueue(0)
     q.Enqueue(1)
     q.Enqueue(2)
@@ -80,7 +80,7 @@ func TestQueueAddRemove(t *testing.T) {
 }
 
 func TestMesageStruct(t* testing.T) {
-    var q *Queue = New()
+    var q *Queue[int]= New[int]()
     q.Enqueue(0)
     q.Enqueue(1)
     q.Enqueue(2)

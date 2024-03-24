@@ -7,23 +7,23 @@ import (
 
 // Implementation with be an array of nodes using circular buffer
 // Insert at the tail, return at the head
-type Queue struct { 
-    nodes []interface{}
+type Queue[T any] struct { 
+    nodes []T
     head int 
     tail int
     length int // available slots
     size int // total size of queue
 }
 
-func New() *Queue {
-    result := &Queue{}
+func New[T any]() *Queue[T] {
+    result := &Queue[T]{}
     result.Create()
     return result
 }
 
-func (q* Queue) Create() *Queue {
+func (q* Queue[T]) Create() *Queue[T] {
     initalSize := 1
-    q.nodes = make([]interface{}, initalSize)
+    q.nodes = make([]T, initalSize)
     q.head = 0
     q.tail = 0
     q.size = initalSize
@@ -31,9 +31,10 @@ func (q* Queue) Create() *Queue {
     return q
 }
 
-func (q* Queue) Deque() interface{} {
+func (q* Queue[T]) Deque() T {
     if q.IsEmpty() == true {
-        return nil
+        var result T
+        return result // returns the default type for anytype
     }
     result := q.nodes[q.head]
     q.head = (q.head + 1) % q.size
@@ -41,21 +42,21 @@ func (q* Queue) Deque() interface{} {
     return result
 }
 
-func (q* Queue) IsFull() bool {
+func (q* Queue[T]) IsFull() bool {
     if q.length == q.size {
         return true 
     }
     return false
 }
 
-func (q* Queue) IsEmpty() bool {
+func (q* Queue[T]) IsEmpty() bool {
     if q.length == 0 {
         return true 
     }
     return false
 }
 
-func (q* Queue) Enqueue(node interface{}) {
+func (q* Queue[T]) Enqueue(node T) {
     q.resize()
     q.nodes[q.tail] = node;
     q.tail = (q.tail + 1) % q.size
@@ -63,10 +64,10 @@ func (q* Queue) Enqueue(node interface{}) {
 }
 
 // Return error or the new size of the queue
-func (q* Queue) resize() (int, error) {
+func (q* Queue[T]) resize() (int, error) {
     if (q.IsFull() == true) {
         newSize := q.size * 2
-        tempNodes := make([]interface{}, newSize)
+        tempNodes := make([]T, newSize)
         //TODO we could try built in copy w/ array splicing
         for j := 0; j < q.size; j++ {
             // var pos int = q.head + j % q.size
@@ -86,7 +87,7 @@ func (q* Queue) resize() (int, error) {
     return 0, nil
 }
 
-func (q *Queue) ToString() string {
+func (q *Queue[T]) ToString() string {
     // TODO this does not actually display the order of the queue
     var result  bytes.Buffer
     result.WriteString("CONTENTS OF QUEUE ARE NOT IN QUEUE ORDER")
