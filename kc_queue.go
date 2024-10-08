@@ -3,11 +3,13 @@ package kc_queue
 import (
 	"bytes"
 	"fmt"
+    "sync"
 )
 
 // Implementation with be an array of nodes using circular buffer
 // Insert at the tail, return at the head
 type Queue[T any] struct { 
+    lock sync.Mutex
     nodes []T
     head int 
     tail int
@@ -32,7 +34,9 @@ func (q* Queue[T]) create() *Queue[T] {
 }
 
 func (q* Queue[T]) Deque() T {
-    if q.IsEmpty() == true {
+    q.lock.Lock()
+    defer q.lock.Unlock()
+    if q.length == 0 {
         var result T
         return result // returns the default type for anytype
     }
@@ -43,6 +47,8 @@ func (q* Queue[T]) Deque() T {
 }
 
 func (q* Queue[T]) IsFull() bool {
+    q.lock.Lock()
+    defer q.lock.Unlock()
     if q.length == q.size {
         return true 
     }
@@ -50,6 +56,8 @@ func (q* Queue[T]) IsFull() bool {
 }
 
 func (q* Queue[T]) IsEmpty() bool {
+    q.lock.Lock()
+    defer q.lock.Unlock()
     if q.length == 0 {
         return true 
     }
@@ -57,6 +65,8 @@ func (q* Queue[T]) IsEmpty() bool {
 }
 
 func (q* Queue[T]) Enqueue(node T) {
+    q.lock.Lock()
+    defer q.lock.Unlock()
     q.resize()
     q.nodes[q.tail] = node;
     q.tail = (q.tail + 1) % q.size
@@ -65,7 +75,7 @@ func (q* Queue[T]) Enqueue(node T) {
 
 // Return error or the new size of the queue
 func (q* Queue[T]) resize() (int, error) {
-    if (q.IsFull() == true) {
+    if (q.length == q.size) {
         newSize := q.size * 2
         tempNodes := make([]T, newSize)
         //TODO we could try built in copy w/ array splicing
