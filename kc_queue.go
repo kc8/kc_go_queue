@@ -95,6 +95,9 @@ func (q* Queue[T]) resize() (int, error) {
         return newSize , nil
     }
     return 0, nil
+		for j := 0; j < q.length; j++ {
+			tempNodes[j] = q.nodes[(q.head+j)%q.size]
+		}
 }
 
 func (q *Queue[T]) ToString() string {
