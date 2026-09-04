@@ -43,6 +43,9 @@ func (pq *PriorityQueue[T]) GetNetxtPriorityItem() T {
 	var highestPriority = -1
 	var highest T
 	var highestIndex = -1
+	if pq.validEntries <= 0 {
+		return highest
+	}
 	for index, node := range pq.nodes {
 		if node.prority > highestPriority {
 			highest = node.data
